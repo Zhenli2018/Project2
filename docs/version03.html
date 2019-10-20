@@ -12,12 +12,26 @@
               loadJSON(url, gotData);
             }
             function gotData(data) {
-                var text=''
-                for (i=0;i<data.response.docs.length;i++) {
-                    text = text + "<br />" + data.response.docs[i].headline.main
+                appendToPage (data)
+                var hits = data.response.meta.hits
+                
+                for (var i = 1; i < 3; i++) {
+                loadJSON(url + '&page=' + i, appendToPage)
                 }
-                document.getElementById("test_output").innerHTML = text 
-               }
+            }
+            function appendToPage(data) {
+                var articles = data.response.docs;
+                for (var i = 0; i < articles.length; i++) {
+                    articleCount++
+                    h = document.createElement('h3')
+                    h.innerHTML = '(' + articleCount + ') ' + articles[i].headline.main
+                    document.body.appendChild(h);
+                    //create a paragraph element, put text in it, append it to <BODY>
+                    p = document.createElement('p')
+                    p.innerHTML = articles[i].snippet
+                    document.body.appendChild(p);  
+                  }
+                }
            </script>
     </head>
     <body>
